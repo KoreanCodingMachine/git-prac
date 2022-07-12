@@ -108,11 +108,62 @@ def check_dup():
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
+
+@app.route("/gameData", methods=["POST"])
+def movie_post():
+    url_receive = request.form['url_give']
+    star_receive = request.form['star_give']
+    title_receive = request.form['title_give']
+
+    doc = {
+        'url': url_receive,
+        'star': star_receive,
+        'title': title_receive
+    }
+
+    db.movies.insert_one(doc)
+
+    return jsonify({'msg': 'POST 연결 완료!'})
+
+
+@app.route("/gameData", methods=["GET"])
+def movie_get():
+    movie_list = list(db.movies.find({}, {'_id': False}))
+    return jsonify({'movies': movie_list})
+
+
 # 화면 뒤로가기했을때 로그임 풀림 방지
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
+
+
+@app.route("/game", methods=["GET"])
+def game_get():
+    # 게임 카드 메인페이지에 전송
+    game_list = list(db.games.find({}, {'_id': False}))
+    return jsonify({'games': game_list})
+
+
+# 게임 타이틀을 통해 db에서 게임을 찾아 detail 페이지에 전송
+@app.route('/detail/<gamename>')
+def detail(gamename):
+    game = db.games.find_one({'title': gamename})
+    comment_list = list(db.comments.find({}, {'_id': False}))
+    return render_template("detail.html", game=game, name=gamename, comment_list=comment_list)
+
+
+@app.route("/api/save_comments", methods=["POST"])
+def save_comments():
+    star_receive = request.form['star_give']
+    comment_receive = request.form['comment_give']
+    name_receive = request.form['name_give']
+
+    doc = {'star': star_receive, 'comment': comment_receive, 'name': name_receive}
+    db.comments.insert_one(doc)
+
+    return jsonify({'msg': '작성 완료!'})
 
 
 if __name__ == '__main__':

@@ -15,13 +15,16 @@
     <!--    폰트어썸 js-->
     <script src="https://kit.fontawesome.com/ffe5b5696f.js" crossorigin="anonymous"></script>
 
-    <title>Title</title>
+    <link href="../static/mystyle.css" rel="stylesheet"/>
+
+    <title>{{ game.title }} | MIMO</title>
 
     <style>
         .title-card {
             margin: auto;
 
         }
+
         .pic {
             width: 300px;
 
@@ -31,6 +34,8 @@
             justify-content: center;
 
         }
+
+
         .star {
             width: 100px;
             height: 60px;
@@ -62,13 +67,10 @@
     </style>
 
     <script>
-        let game = "{{ game }}"
-        $(document).ready(function () {
-        })
-
         function save_comments() {
             let star = $('#star').val()
             let comment = $('#comment').val()
+
 
             $.ajax({
                 type: 'POST',
@@ -121,7 +123,6 @@
 </div>
 
 <div class="mycards" id="comment-list">
-
     {% for comment in comment_list %}
     {% if comment.name==name %}
     <div class="card">

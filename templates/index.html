@@ -49,39 +49,41 @@
             window.location.href = "/login"
         }
 
+        function to_detail(){
+            window.location.href = "/detail"
+        }
+
         $(document).ready(function () {
             listing();
         });
 
         function listing() {
+            $('#cards-box').empty()
             $.ajax({
                 type: 'GET',
-                url: '/game',
+                url: '/gameData',
                 data: {},
                 success: function (response) {
-                    games = response['games']
-                    for (let i = 0; i < games.length; i++) {
-                        const title = games[i]['title']
-                        const image = games[i]['img']
-                        const desc = games[i]['desc']
-                        const star = games[i]['star']
-                        const comment = games[i]['comment']
+                    let rows = response['movies']
+                    console.log(rows)
+                    for (let i = 0; i < rows.length; i++) {
+                        let image = rows[i]['url']
+                        let star = rows[i]['star']
+                        let title = rows[i]['title']
 
-                        let star_icon = '⭐️'.repeat(star)
+                        let star_image = '⭐'.repeat(star)
 
-                        let card_html =
-                            `<div onclick="window.location.href='/detail/${title}'" class="col">
-                                <div class="card h-100">
-                                    <img src="${image}" class="card-img-top">
+                        let temp_html = `<div class="col">
+                                    <div class="card h-100">
+                                        <img src="${image}"
+                                             class="card-img-top">
                                         <div class="card-body">
-                                            <h5 class="card-title">${title}</h5>
-                                            <p class="card-text">${desc}</p>
-                                            <p>${star_icon}</p>
-                                            <p class="mycomment">${comment}</p>
+                                            <p>${star_image}</p>
+                                            <p class="mycomment">${title}</p>
                                         </div>
-                                </div>
-                            </div>`
-                        $('#cards-box').append(card_html)
+                                    </div>
+                                </div>`
+                        $('#cards-box').append(temp_html)
                     }
                 }
             })
@@ -90,11 +92,12 @@
         function posting() {
             let url = $('#url').val()
             let star = $('#star').val()
+            let title = $('#title').val()
 
             $.ajax({
                 type: 'POST',
-                url: '/game',
-                data: {url_give: url, star_give: star},
+                url: '/gameData',
+                data: {url_give: url, star_give: star, title_give: title},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -126,38 +129,36 @@
     </nav>
 </section>
 
-<section class="post-section">
-    <div class="mypost mb-t" id="post-box">
-        <p>네이버 백과사전에 있는 보드게임을 기록해봐요</p>
-        <div class="form-floating mb-3">
-            <input id="url" type="email" class="form-control" placeholder="name@example.com">
-            <label>영화URL</label>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="star">별점</label>
-            <select class="form-select" id="star">
-                <option selected>-- 선택하기 --</option>
-                <option value="1">⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="5">⭐⭐⭐⭐⭐</option>
-            </select>
-        </div>
-        <div class="form-floating">
-            <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
-            <label for="comment">코멘트</label>
-        </div>
-        <div class="mybtns">
-            <button onclick="posting()" type="button" class="btn btn-dark mt-3">기록하기</button>
-            <button onclick="close_box()" type="button" class="btn btn-outline-dark mt-3">닫기</button>
-        </div>
+<div class="mypost" id="post-box">
+    <p class="mb-3">보드게임을 기록해봐요</p>
+    <div class="form-floating mb-3">
+        <input id="url" type="email" class="form-control" placeholder="name@example.com">
+        <label for='url'>URL</label>
     </div>
-    <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
+    <div class="form-floating">
+        <textarea id="title" class="form-control" placeholder="Leave a comment here"></textarea>
+        <label for="title">제목</label>
+    </div>
+    <div class="input-group mt-3">
+        <label class="input-group-text" for="star">별점</label>
+        <select class="form-select" id="star">
+            <option selected>-- 선택하기 --</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+        </select>
+    </div>
+    <div class="mybtns">
+        <button onclick="posting()" type="button" class="btn btn-dark mt-3">전송하기</button>
+        <button onclick="close_box()" type="button" class="btn btn-outline-dark mt-3">닫기</button>
+    </div>
+</div>
+<div class="mycards section">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
 
-        </div>
     </div>
-</section>
+</div>
 </body>
 </html>

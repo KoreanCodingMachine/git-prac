@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--    부트스트랩 css-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <!--    jquery, 부트스트랩 JS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <!--    폰트어썸 js-->
+    <script src="https://kit.fontawesome.com/ffe5b5696f.js" crossorigin="anonymous"></script>
+
+    <title>Title</title>
+
+    <style>
+        .title-card {
+            margin: auto;
+
+        }
+        .pic {
+            width: 300px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+        }
+        .star {
+            width: 100px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .commentsave {
+            width: 1200px;
+            margin: auto;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+
+        }
+
+        .mycards {
+            width: 95%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .mycards > .card {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <script>
+        let game = "{{ game }}"
+        $(document).ready(function () {
+        })
+
+        function save_comments() {
+            let star = $('#star').val()
+            let comment = $('#comment').val()
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/save_comments',
+                data: {star_give: star, comment_give: comment, name_give: "{{ name }}"},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<button onclick="window.location.href='/'" type="button" class="btn btn-light">메인으로</button>
+<div class="title-card" style="max-width: 1200px;">
+    <div class="row g-0">
+        <div class="pic">
+            <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTAsXCJqwingqgyPr3AN0mUE17Mz0S2ZjadCuCZgH-ttlJCkwj8SbOaSSDNydrh-z9FdA3sDiBnk6E&usqp=CAc"
+                 class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h1 class="card-title" id="card-title">{{ game.title }}</h1>
+                <p></p>
+                <p class="card-text">{{ game.hashtag }}</p>
+                <p class="card-text"><i class="fa-solid fa-person"></i> {{ game.member }}</p>
+                <p class="card-text"><i class="fa-solid fa-clock"></i> {{ game.time }}</p>
+                <p class="card-text">난이도 : {{ game.star }}</p>
+                <p class="card-text">상세정보 : {{ game.desc }}</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="commentsave">
+    <div class="starbox">
+        <select class="star" id="star">
+            <option selected>별점</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+        </select>
+    </div>
+    <div class="input-group mb-3">
+        <textarea class="form-control" placeholder="리뷰 작성" id="comment"></textarea>
+        <button onclick="save_comments()" class="btn btn-outline-secondary" type="button" id="button-addon2">작성</button>
+    </div>
+</div>
+
+<div class="mycards" id="comment-list">
+
+    {% for comment in comment_list %}
+    {% if comment.name==name %}
+    <div class="card">
+        <div class="card-header">
+            {% for x in range(comment.star|int) %}
+            {% set x= '⭐' %}
+            {{ x }}
+            {% endfor %}
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>{{ comment.comment }}</p>
+            </blockquote>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+</body>
+</html>

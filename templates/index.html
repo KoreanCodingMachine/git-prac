@@ -49,8 +49,8 @@
             window.location.href = "/login"
         }
 
-        function to_detail(){
-            window.location.href = "/detail"
+        function to_detail() {
+            window.location.href = "/detail/gamename"
         }
 
         $(document).ready(function () {
@@ -156,8 +156,7 @@
     </div>
 </div>
 <div class="mycards section">
-    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box" onclick="to_detail()">
     </div>
 </div>
 </body>

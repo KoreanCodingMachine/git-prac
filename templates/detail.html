@@ -22,19 +22,15 @@
     <style>
         .title-card {
             margin: auto;
-
         }
 
         .pic {
             width: 300px;
-
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
         }
-
 
         .star {
             width: 100px;
@@ -50,8 +46,6 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-
-
         }
 
         .mycards {
@@ -70,7 +64,6 @@
         function save_comments() {
             let star = $('#star').val()
             let comment = $('#comment').val()
-
 
             $.ajax({
                 type: 'POST',

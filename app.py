@@ -151,6 +151,8 @@ def game_get():
 def detail(gamename):
     game = db.games.find_one({'title': gamename})
     comment_list = list(db.comments.find({}, {'_id': False}))
+    print(comment_list)
+    print(game)
     return render_template("detail.html", game=game, name=gamename, comment_list=comment_list)
 
 

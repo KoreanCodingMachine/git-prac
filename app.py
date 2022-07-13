@@ -26,7 +26,7 @@ db = client.dbsparta
 # 로그인 되면 토큰을 보내주고
 # 로그인이 되지 않으면 로그인을 해야한다고 알려줌
 
-@app.route('/')
+# @app.route('/')
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -54,7 +54,6 @@ def user(username):
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
-
         user_info = db.users.find_one({"username": username}, {"_id": False})
         return render_template('user.html', user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -149,11 +148,18 @@ def game_get():
 # 게임 타이틀을 통해 db에서 게임을 찾아 detail 페이지에 전송
 @app.route('/detail/<gamename>')
 def detail(gamename):
-    game = db.games.find_one({'title': gamename})
+    game = db.movies.find_one({'title': gamename},{'_id':False})
     comment_list = list(db.comments.find({}, {'_id': False}))
-    print(comment_list)
     print(game)
     return render_template("detail.html", game=game, name=gamename, comment_list=comment_list)
+
+# api를 하나 더 만들어서 index쪽에서 get요청을 하면 서버에서 movies db를 조회해서 game 데이터 뽑아내려주는 식으로 해보자
+
+# @app.route('/')
+# def main(gamename):
+#     game = db.games.find_one({'title': gamename})
+#     comment_list = list(db.comments.find({}, {'_id': False}))
+#     return render_template("index.html", game=game, name=gamename, comment_list=comment_list)
 
 
 @app.route("/api/save_comments", methods=["POST"])

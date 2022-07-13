@@ -70,6 +70,7 @@
                 url: '/api/save_comments',
                 data: {star_give: star, comment_give: comment, name_give: "{{ name }}"},
                 success: function (response) {
+                    console.log(response)
                     alert(response['msg'])
                     window.location.reload()
                 }
@@ -82,18 +83,18 @@
 <div class="title-card" style="max-width: 1200px;">
     <div class="row g-0">
         <div class="pic">
-            <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTAsXCJqwingqgyPr3AN0mUE17Mz0S2ZjadCuCZgH-ttlJCkwj8SbOaSSDNydrh-z9FdA3sDiBnk6E&usqp=CAc"
-                 class="img-fluid rounded-start" alt="...">
+            <img>
+             <h1 class="card-title" id="card-title">{{ name }}</h1>
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h1 class="card-title" id="card-title">{{ game.title }}</h1>
-                <p></p>
-                <p class="card-text">{{ game.hashtag }}</p>
-                <p class="card-text"><i class="fa-solid fa-person"></i> {{ game.member }}</p>
-                <p class="card-text"><i class="fa-solid fa-clock"></i> {{ game.time }}</p>
-                <p class="card-text">난이도 : {{ game.star }}</p>
-                <p class="card-text">상세정보 : {{ game.desc }}</p>
+<!--                <h1 class="card-title" id="card-title">{{ name }}</h1>-->
+<!--                <p></p>-->
+<!--                <p class="card-text">{{ game.hashtag }}</p>-->
+<!--                <p class="card-text"><i class="fa-solid fa-person"></i> {{ game.member }}</p>-->
+<!--                <p class="card-text"><i class="fa-solid fa-clock"></i> {{ game.time }}</p>-->
+<!--                <p class="card-text">난이도 : {{ game.star }}</p>-->
+<!--                <p class="card-text">상세정보 : {{ game.desc }}</p>-->
 
             </div>
         </div>

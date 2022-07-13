@@ -49,10 +49,6 @@
             window.location.href = "/login"
         }
 
-        function to_detail() {
-            window.location.href = "/detail/gamename"
-        }
-
         $(document).ready(function () {
             listing();
         });
@@ -70,20 +66,19 @@
                         let image = rows[i]['url']
                         let star = rows[i]['star']
                         let title = rows[i]['title']
-
+                        console.log(typeof title , title)
                         let star_image = '⭐'.repeat(star)
-
-                        let temp_html = `<div class="col">
-                                    <div class="card h-100">
-                                        <img src="${image}"
-                                             class="card-img-top">
+                        let card_html =
+                            `<div onclick="window.location.href='/detail/'+${title} class="col">
+                                <div class="card h-100">
+                                    <img src="${image}" class="card-img-top">
                                         <div class="card-body">
+                                            <h5 class="card-title">${title}</h5>
                                             <p>${star_image}</p>
-                                            <p class="mycomment">${title}</p>
                                         </div>
-                                    </div>
-                                </div>`
-                        $('#cards-box').append(temp_html)
+                                </div>
+                            </div>`
+                        $('#cards-box').append(card_html)
                     }
                 }
             })

@@ -14,11 +14,8 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-import certifi
-
-ca = certifi.where()
-
-client = MongoClient('mongodb+srv://test:sparta@cluster0.rrtmj.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
+client = MongoClient(
+    'mongodb+srv://test:sparta@cluster0.rrtmj.mongodb.net/?retryWrites=true&w=majority',)
 db = client.dbsparta
 
 
@@ -53,7 +50,8 @@ def user(username):
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        status = (username == payload["id"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
+        # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
+        status = (username == payload["id"])
         user_info = db.users.find_one({"username": username}, {"_id": False})
         return render_template('user.html', user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -68,7 +66,8 @@ def sign_in():
     password_receive = request.form['password_give']
 
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'username': username_receive, 'password': pw_hash})
+    result = db.users.find_one(
+        {'username': username_receive, 'password': pw_hash})
 
     if result is not None:
         payload = {
@@ -87,7 +86,8 @@ def sign_in():
 def sign_up():
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
-    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    password_hash = hashlib.sha256(
+        password_receive.encode('utf-8')).hexdigest()
     doc = {
         "username": username_receive,  # 아이디
         "password": password_hash,  # 비밀번호
@@ -148,7 +148,7 @@ def game_get():
 # 게임 타이틀을 통해 db에서 게임을 찾아 detail 페이지에 전송
 @app.route('/detail/<gamename>')
 def detail(gamename):
-    game = db.movies.find_one({'title': gamename},{'_id':False})
+    game = db.movies.find_one({'title': gamename}, {'_id': False})
     comment_list = list(db.comments.find({}, {'_id': False}))
     print(game)
     return render_template("detail.html", game=game, name=gamename, comment_list=comment_list)
